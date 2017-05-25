@@ -1,0 +1,62 @@
+language: go
+
+go:
+  - 1.8.1
+
+sudo: required
+
+addons:
+  apt:
+    packages:
+      - unixodbc
+      - unixodbc-dev
+
+services:
+  - docker
+
+before_script:
+  - sudo service mysql stop
+  - sudo service postgresql stop
+  - docker run -d -p 5433:5433 -m 1g --name vertica jbfavre/vertica:8.1
+  - docker run -d -p 3306:3306 --name mysql -e MYSQL_ALLOW_EMPTY_PASSWORD=yes percona/percona-server:latest --binlog_format=ROW --binlog_row_image=full --server-id=1 --log-bin=/tmp/bin.log --gtid-mode=ON --enforce-gtid-consistency
+  - wget https://my.vertica.com/client_drivers/8.1.x/8.1.0-0/vertica-client-8.1.0-0.x86_64.tar.gz -O /tmp/vertica-client-8.1.0-0.x86_64.tar.gz
+  - tar -xvf /tmp/vertica-client-8.1.0-0.x86_64.tar.gz -C /
+  - printf "[Vertica]\nDescription = Vertica driver\nDriver = /opt/vertica/lib64/libverticaodbc.so" | sudo odbcinst -i -d -r
+  - printf "[Vertica]\nDescription = Vertica\nDriver = /opt/vertica/lib64/libverticaodbc.so\nDriver = Vertica" | odbcinst -i -s -r
+  - curl https://glide.sh/get | sh
+  - glide install
+
+script:
+  - make test
+
+after_success:
+  if ([ "$TRAVIS_BRANCH" == "master" ] || [ ! -z "$TRAVIS_TAG" ]) && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+      make build;
+      make release;
+      gem install --no-ri --no-rdoc fpm;
+      gem install pleaserun;
+      make deb;
+  fi;
+
+deploy:
+  - provider: releases
+    api_key:
+      secure: fqu223Co+LgdQdgFNfrdQQBzpdLyudmwQMYCRx0/ELDla26jxmAgwYzUf1EK+3EkNtzPsZ5prCct1W7TR/gd1++2fqjlypZ2OGpEuP/B91khmrIiDy5dTGHw7D3qPsbeQLlU8pemYGwQhVEy8RpWPSJkL6FJ1VrVYxPSYdUTRDgEMO4OWPQzgXSQn9Nyqcjkiyll5PqHoczKFn+X+hDmNPSaV+1okc69k5z/dCgaMYagqb+A9yWw1pmeELCgLCuyYKP7YTZYXOZzATgflingYIywyXj5pC8i5a8fM14Wm6uePP1CVqX9uV4whQXQyR9b6ZYQHm8pWqMdOZqrRvAO++A4loPcK1RlMdQaxi5f/Fpesgvp02AjzaqvlwrDu7v4953l/RhGqTTzt8Dd8WfzDVdVXLQdrKTGAXxxD1GpbKHWJVYriMWTMcuAwmWnoFzwTs5puApAaSX/qmneKhOAQxxSK0wYvRHCxbv+Irsqc4kF9wiljThbEQtpk3W/DBBkYQ9pmzUWmt5opcYzlauObSsl+ID2cw8pq5pAa9q4ci5fqYMXlcchUmNoqsrZlJaDGAZChjrZIzVjCtBntjLzUYVF41bPyD+9Kmp3cu8lolevMAxoC6LqPSo7HIQUANS5u4p1ZPHU1fjya0nLFvsGmQ2rtYw+HrXeSkV9EV7nmAU=
+    file: repligator-linux-amd64.tar.gz
+    skip_cleanup: true
+    on:
+      repo: b13f/repligator
+      branch: master
+      tags: true
+  - provider: packagecloud
+    skip_cleanup: true
+    repository: repligator
+    username: b13f
+    package_glob: "*.deb"
+    token:
+      secure: Pu5Y0PkcpSb2pNJHN9B7hePNZhxU/HIhhWKWyGBO6VQSgCtBFmgxEfHwfba3KQKaD5uT0pSRDi9ffBYtHFJbEz2wXYK84IMQRJjml8kVAfK00g8a1ZwBRL0BXgJUlaLC/0yF9gMPuUdZOT6iDpD/z9jVfgbYGalt93bZysAyuUiyYKxnXfjC1EV9L9ocSXqAyBIZ56WJ/l5XmdLzHwpinyiPP4F67l44TGSKIwFoSUFwOA/dqprWGp50sdOz8uiBqMk9mEwhd3Ksz9Ly6eMiEDKd0EQS+nmP7yX8oMZDzo07igzBIoI7Ob1iI1TPpPTsEjwzwY3GjN+Em7JvX8QzTLlupT50PgwJYZRbhVUW/Hkrn9bt0WGyzQ8/oSpbZ0p6RWbKIKzI7gF4lmMt489MP/SkFzyNmHcMOkuHoLVZOFtmEiOW4P05VdtqNQ9EABsfklOdxZObGVu/MK+E9TGQJtrZOI8QwRz3pkptnkDkmqB4f9BBtjsKsoX2xrIhvhHf0X5WC4jKKeWdamRTKru3RZ/9luEGhTfBr5d6fqgNpD4+p4Nf8gllPryVAzQ422iHDFCDUVUQOxxnNX7hJeoyLmQnEFF0XNKEABJOoIAME4tS32zPEtxFTpkyVQ0dadwNL8iifAL6xXLGxy8owS3aFL9qtGlwMX5Js+EF9PRHTFo=
+    dist: ubuntu/trusty
+    on:
+      repo: b13f/repligator
+      branch: master
+      tags: true

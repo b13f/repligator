@@ -1,0 +1,39 @@
+sources:
+  - name: shard1
+    type: mysql
+    server_id: 101
+    host: 192.168.0.1
+    port: 3306
+    user: root
+    password:
+    timeout: 10000 #in seconds
+    try_after: 2 #in minutes
+    gtid: ccffeb16-0b05-11e7-852a-080027c2ddae:1-2
+#   schemas: # when exists apply rows event only in schemas
+#    - name: testing # when exists apply only rows event only in schema, ddl for all
+#      sync:
+#        - test # when exists apply only rows events for this tables. exclude not use
+#      exclude: # when exists not apply rows events for this tables
+#        - balance_oou
+#        - balance_demo_oou
+#      gtid: ccffeb16-0b05-11e7-852a-080027c2ddae:1-6 # you can set gtidset per schema, this schema start sync rows(!) events from this position
+destination:
+  odbc: Vertica
+  host: 192.168.50.85
+  port: 5433
+  user: dbadmin
+  password: password
+  database: main
+  pack: 10000
+  flush_count: 200000
+  flush_time: 120 #seconds
+  data_dir: /opt/repligator/data
+port: 8080
+log_file: /var/log/repligator/repligator.log
+log_level: debug #panic fatal error warn info debug
+slack:
+  bot_token:
+  hook:
+  channel: "#repligator"
+  username: repligator
+  icon: ":crocodile:"

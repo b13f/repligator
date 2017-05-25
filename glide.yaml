@@ -1,0 +1,16 @@
+package: github.com/b13f/repligator
+import:
+- package: github.com/Sirupsen/logrus
+- package: github.com/alexbrainman/odbc
+- package: github.com/johntdyer/slackrus
+- package: github.com/nlopes/slack
+- package: github.com/satori/go.uuid
+- package: github.com/siddontang/go-mysql
+  subpackages:
+  - client
+  - mysql
+  - replication
+- package: github.com/stretchr/testify
+  subpackages:
+  - suite
+- package: gopkg.in/yaml.v2

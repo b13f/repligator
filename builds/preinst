@@ -1,0 +1,3 @@
+#!/bin/sh
+addgroup --quiet --system repligator
+adduser --quiet --home /opt/repligator --system repligator

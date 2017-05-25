@@ -1,0 +1,61 @@
+hash: 37396b01ef83d7ad67fda5d4c0eef37bbf9e03dcc4c85c05db107a325385a6c3
+updated: 2017-05-24T17:23:39.987835036+03:00
+imports:
+- name: github.com/alexbrainman/odbc
+  version: 632bcac255d9e26a89bff5eff914d449e431f7b5
+  subpackages:
+  - api
+- name: github.com/johntdyer/slack-go
+  version: 88736fd63eed11c942b478c3182bdd2f152971e5
+- name: github.com/johntdyer/slackrus
+  version: 9c71df2f4ceb8d8b0bbb12c65c56a8e03e34adba
+- name: github.com/juju/errors
+  version: 6f54ff6318409d31ff16261533ce2c8381a4fd5d
+- name: github.com/ngaut/log
+  version: cec23d3e10b016363780d894a0eb732a12c06e02
+- name: github.com/nlopes/slack
+  version: 72d15a0fc0b773a59c00f78b9e7d97eeb8c4281f
+- name: github.com/satori/go.uuid
+  version: 5bf94b69c6b68ee1b541973bb8e1144db23a194b
+- name: github.com/siddontang/go
+  version: 354e14e6c093c661abb29fd28403b3c19cff5514
+  subpackages:
+  - hack
+  - ioutil2
+  - sync2
+- name: github.com/siddontang/go-mysql
+  version: 0baad4d700af91f9031f5b4e3135f4eb53ed35ce
+  subpackages:
+  - client
+  - mysql
+  - packet
+  - replication
+- name: github.com/Sirupsen/logrus
+  version: 10f801ebc38b33738c9d17d50860f484a0988ff5
+- name: github.com/stretchr/testify
+  version: 4d4bfba8f1d1027c4fdbe371823030df51419987
+  subpackages:
+  - assert
+  - require
+  - suite
+- name: golang.org/x/net
+  version: 6acef71eb69611914f7a30939ea9f6e194c78172
+  subpackages:
+  - context
+  - websocket
+- name: golang.org/x/sys
+  version: 9ccfe848b9db8435a24c424abbc07a921adf1df5
+  subpackages:
+  - unix
+  - windows
+- name: gopkg.in/yaml.v2
+  version: cd8b52f8269e0feb286dfeef29f8fe4d5b397e0b
+testImports:
+- name: github.com/davecgh/go-spew
+  version: 04cdfd42973bb9c8589fd6a731800cf222fde1a9
+  subpackages:
+  - spew
+- name: github.com/pmezard/go-difflib
+  version: d8ed2627bdf02c080bf22230dbb337003b7aba2d
+  subpackages:
+  - difflib
