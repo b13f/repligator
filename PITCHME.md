@@ -1,38 +1,41 @@
-## Repligator
-#### <span style="font-family:Arial;">A  Repligator Tour</span>
+## repligator
+#### <span style="font-family:Arial;">replication from MySQL to Vertica</span>
 
 ---
 
-## If this not about you, you may leave
+##### If this is not about you, repligator will not help you
 
-- You have many MySQL servers (microservices?) with tables >100m rows.
-- You not use Kafka or some other data pipelines.
-- You wanna do some queries for statistic or analytic purposes.
-- You have slaves where you run this queries and wait for hours to get result.
-- You not use ETL yet.
+- You have several MySQL servers (perhaps from microservices) with tables of more than 100 million rows
+- You are not using Kafka or other data pipelines
+- You want to execute analytical requests or collect statistics
+- Maybe you have a slave server where you launch these requests and wait hours for results
+- You do not have an ETL process
 
 ---
 
-## Heterogeneous replication to data warehouse
+## Heterogeneous replication from a relational DBMS in a data warehouse
 
-With Repligator you can replicate all your MySQl data to [Vertica](https://my.vertica.com/docs/8.1.x/HTML/index.htm#Authoring/ConceptsGuide/Other/ConceptsGuide.htm%3FTocPath%3DVertica%2520Concepts%7C_____0)
-<br>
-And you don't need ETL processes
+With repligator, you can replicate all your data from MySQL to [Vertica](https://my.vertica.com/docs/8.1.x/HTML/index.htm#Authoring/ConceptsGuide/Other/ConceptsGuide.htm%3FTocPath%3DVertica%2520Concepts%7C_____0)
+, and you do not need any ETL processes. 
+
+Repligator supports both data replication and data schema modification events.
+
 ---
 
-## Requirements
+## Required
 
-- MySQL servers with GTID replication enabled
-- Vertica ODBC driver installed
-- Vertica 7.2-8.1
+- MySQL master server(s) with enabled GTID replication
+- ODBC Vertica driver installed
+- Vertica version 7.2-8.1
 
 ---
 
 ## Install
 
-- build from source https://github.com/b13f/repligator
-- download latest release from https://github.com/b13f/repligator/releases/latest
-- for ubuntu14.04 use https://packagecloud.io/b13f/repligator
+- Compilation from source codes
+- Download the latest release from [the Releases page](https://github.com/b13f/repligator/releases/latest)
+- Use a [repository](https://packagecloud.io/b13f/repligator) for Ubuntu 14.04.
+- Use Docker image from https://hub.docker.com/r/b13f/repligator/
 
 ---
 ### Configure
@@ -88,8 +91,8 @@ slack:
 ```
 ---
 
-## Run
+## Operation
 
-you can see current cache state at http://repligator.host:8080/info
+You can view cache status through a web interface http://yourrepligator.host:8080/info
 
-To skip not supported DDL you can use http://repligator.host:8080/skip or chat bot command `skip`
+When Repligator encounters a DDL event that it cannot execute, it stops the replication process and waits for the operator’s decision. To continue replication, you can use the web interface http://yourrepligator.host:8080/skip or send the `Skip` command to Slack chat bot.
