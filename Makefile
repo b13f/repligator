@@ -37,3 +37,23 @@ clean:
 	rm -f repligator
 	rm -rf builds/etc/default builds/etc/init.d
 	rm -f builds/opt/repligator/bin/repligator
+
+docker-build: dbuild-V7.2 dbuild-V8.0 dbuild-V8.1
+
+dbuild-V8.1:
+	docker build --rm=true -f Dockerfile \
+	--build-arg REPLIGATOR_VERSION=0.1.0 \
+	--build-arg VERTICA_DRIVER_ARCH_LINK=https://my.vertica.com/client_drivers/8.1.x/8.1.0-0/vertica-client-8.1.0-0.x86_64.tar.gz \
+	-t b13f/repligator:r0.1.0-V8.1 .
+
+dbuild-V8.0:
+	docker build --rm=true -f Dockerfile \
+	--build-arg REPLIGATOR_VERSION=0.1.0 \
+	--build-arg VERTICA_DRIVER_ARCH_LINK=https://my.vertica.com/client_drivers/8.0.x/8.0.1/vertica-client-8.0.1-0.x86_64.tar.gz \
+	-t b13f/repligator:r0.1.0-V8.0 .
+
+dbuild-V7.2:
+	docker build --rm=true -f Dockerfile \
+	--build-arg REPLIGATOR_VERSION=0.1.0 \
+	--build-arg VERTICA_DRIVER_ARCH_LINK=https://my.vertica.com/client_drivers/7.2.x/7.2.3-0/vertica-client-7.2.3-0.x86_64.tar.gz \
+	-t b13f/repligator:r0.1.0-V7.2 .
