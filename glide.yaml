@@ -1,6 +1,6 @@
 package: github.com/b13f/repligator
 import:
-- package: github.com/Sirupsen/logrus
+- package: github.com/sirupsen/logrus
 - package: github.com/alexbrainman/odbc
 - package: github.com/johntdyer/slackrus
 - package: github.com/nlopes/slack
