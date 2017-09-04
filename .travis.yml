@@ -17,8 +17,9 @@ services:
 before_script:
   - sudo service mysql stop
   - sudo service postgresql stop
-  - docker run -d -p 5433:5433 -m 1g --name vertica jbfavre/vertica:8.1
   - docker run -d -p 3306:3306 --name mysql -e MYSQL_ALLOW_EMPTY_PASSWORD=yes percona/percona-server:latest --binlog_format=ROW --binlog_row_image=full --server-id=1 --log-bin=/tmp/bin.log --gtid-mode=ON --enforce-gtid-consistency
+  - docker run -d -p 5433:5433 -m 1g --name vertica jbfavre/vertica:8.1
+  - sleep 10
   - wget https://my.vertica.com/client_drivers/8.1.x/8.1.1-2/vertica-client-8.1.1-2.x86_64.tar.gz -O /tmp/vertica-client-8.1.1-2.x86_64.tar.gz
   - tar -xvf /tmp/vertica-client-8.1.1-2.x86_64.tar.gz -C /
   - printf "[Vertica]\nDescription = Vertica driver\nDriver = /opt/vertica/lib64/libverticaodbc.so" | sudo odbcinst -i -d -r
